@@ -30,6 +30,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  animate_do: ^3.3.0
+  go_router: ^14.0.0
 
   cupertino_icons: ^1.0.8
   flutter_riverpod: ^2.6.1
