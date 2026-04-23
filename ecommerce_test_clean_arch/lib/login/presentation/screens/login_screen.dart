@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/presentation/viewstate/view_state.dart';
 import '../navigatorstates/login_navigator_state.dart';
 import '../viewmodel/login_viewmodel.dart';
-import '../../../counter/presentation/screens/counter_screen.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -40,9 +40,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   void _handleNavigation(LoginNavigatorState navigatorState) {
     if (navigatorState is GoToHomeScreen) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const CounterScreen()),
-      );
+      context.go('/counter');
     }
   }
 
