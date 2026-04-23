@@ -1,4 +1,4 @@
-import '../../domain/counter.dart';
+import '../../counter.dart';
 import '../../infrastructure/entities/counter_response.dart';
 
 class CounterMapper {

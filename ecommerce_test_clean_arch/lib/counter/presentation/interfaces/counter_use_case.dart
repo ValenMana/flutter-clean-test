@@ -1,19 +1,8 @@
-import '../../domain/counter.dart';
-import '../../data/counter_repository_impl.dart';
+import '../../../core/domain/result.dart';
+import '../../../core/presentation/models/ui_error.dart';
+import '../../counter.dart';
 
-abstract class ICounterUseCase {
-  Future<Counter> getCounter();
-  Future<Counter> incrementCounter(int currentValue);
-}
-
-class CounterUseCaseImpl implements ICounterUseCase {
-  final CounterRepositoryImpl _repository;
-
-  CounterUseCaseImpl(this._repository);
-
-  @override
-  Future<Counter> getCounter() => _repository.getCounter();
-
-  @override
-  Future<Counter> incrementCounter(int currentValue) => _repository.incrementCounter(currentValue);
+abstract class CounterUseCase {
+  Future<Result<Counter, UiError>> getCounter();
+  Future<Result<Counter, UiError>> incrementCounter(int currentValue);
 }

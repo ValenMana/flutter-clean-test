@@ -1,6 +1,6 @@
 import '../../infrastructure/entities/counter_response.dart';
 
-abstract class ICounterDataSource {
+abstract class CounterService {
   Future<CounterResponse> getCounter();
-  Future<CounterResponse> incrementCounter(int currentValue);
+  Future<CounterResponse> saveCounter(int value);
 }

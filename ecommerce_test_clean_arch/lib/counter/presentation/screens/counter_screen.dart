@@ -1,13 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../di/counter_providers.dart';
+import '../../../core/presentation/viewstate/view_state.dart';
+import '../viewmodel/counter_viewmodel.dart';
 
 class CounterScreen extends ConsumerWidget {
   const CounterScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final counterAsync = ref.watch(counterNotifierProvider);
+    final counterState = ref.watch(counterViewModelProvider);
+
+    ref.listen(counterViewModelProvider, (previous, next) {
+      if (next.viewState is ErrorState<void>) {
+        final error = next.viewState as ErrorState<void>;
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(error.message)));
+        ref.read(counterViewModelProvider.notifier).clearError();
+      }
+    });
 
     return Scaffold(
       appBar: AppBar(
@@ -15,27 +26,22 @@ class CounterScreen extends ConsumerWidget {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: Center(
-        child: counterAsync.when(
-          data: (counter) => Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text('You have pushed the button this many times se:'),
-              Text(
-                '${counter.value}',
-                style: Theme.of(context).textTheme.headlineMedium,
+        child: counterState.viewState is Loading<void>
+            ? const CircularProgressIndicator()
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('You have pushed the button this many times:'),
+                  Text(
+                    '${counterState.counterValue}',
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+                ],
               ),
-            ],
-          ),
-          loading: () => const CircularProgressIndicator(),
-          error: (err, stack) => Text('Error: $err'),
-        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          final counter = counterAsync.value;
-          if (counter != null) {
-            ref.read(counterNotifierProvider.notifier).increment(counter.value);
-          }
+          ref.read(counterViewModelProvider.notifier).increment();
         },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
